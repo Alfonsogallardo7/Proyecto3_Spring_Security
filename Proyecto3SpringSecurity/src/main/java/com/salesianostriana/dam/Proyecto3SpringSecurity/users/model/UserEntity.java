@@ -52,12 +52,6 @@ public class UserEntity implements UserDetails {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
-    /* Preguntar a Luismi sobre por que en el repositorio no está, en el video de ow dice que es por que
-    * lo va a dar luego loombok pero también borra el getUsername*/
-    @Override
-    public String getPassword() {
-        return null;
-    }
 
     @Override
     public String getUsername() {
