@@ -1,9 +1,11 @@
 package com.salesianostriana.dam.Proyecto3SpringSecurity.users.services;
 
 import com.salesianostriana.dam.Proyecto3SpringSecurity.services.base.BaseService;
+import com.salesianostriana.dam.Proyecto3SpringSecurity.users.dto.CreateUserDto;
 import com.salesianostriana.dam.Proyecto3SpringSecurity.users.model.UserEntity;
 import com.salesianostriana.dam.Proyecto3SpringSecurity.users.model.UserRole;
 import com.salesianostriana.dam.Proyecto3SpringSecurity.users.repository.UserEntityRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service("userDetailsService")
+@RequiredArgsConstructor
 public class UserEntityService extends BaseService<UserEntity, Long, UserEntityRepository> implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
@@ -22,7 +25,7 @@ public class UserEntityService extends BaseService<UserEntity, Long, UserEntityR
                 .orElseThrow(()-> new UsernameNotFoundException(email + " no encontrado"));
     }
 
-    public UserEntity save (CreatedUserDto newUser) {
+    public UserEntity save (CreateUserDto newUser) {
         if (newUser.getPassword().contentEquals(newUser.getPassword2())) {
             UserEntity userEntity = UserEntity.builder()
                     .password(passwordEncoder.encode(newUser.getPassword()))
