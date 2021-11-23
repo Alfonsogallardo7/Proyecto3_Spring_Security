@@ -38,7 +38,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionManagement()
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.)
+                    .authorizeRequests()
+                        .antMatchers(HttpMethod.POST, "/auth/register/gestor", "inmobiliaria").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/auth/register/admin").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/propietario").hasRole("USER")
+                .antMatchers(HttpMethod.GET, "/propietario/{id}").hasAnyRole("ADMIN", "PROPIETARIO")
+                .antMatchers(HttpMethod.DELETE, "/propietario/{id}").hasAnyRole("ADMIN", "PROPIETARIO")
+                .antMatchers(HttpMethod.POST, "/vivienda").hasRole("PROPIETARIO")
+                .antMatchers(HttpMethod.GET, "/vivienda").hasRole("USER")
+                .antMatchers(HttpMethod.GET, "vivienda/{id}").hasRole("USER")
+                .antMatchers(HttpMethod.PUT, "vivienda/{id}").hasAnyRole("PROPIETARIO", "ADMIN")
+                .antMatchers(HttpMethod.DELETE, "vivienda/{id}").hasAnyRole("PROPIETARIO", "ADMIN")
+                .antMatchers(HttpMethod.POST, "/vivienda/{id}/inmobiliaria/{id}").hasAnyRole("PROPIETARIO", "ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/vivienda/{id}/inmobiliaria").hasAnyRole("ADMIN", "PROPIETARIO", "GESTOR")
+                .anyRequest().authenticated()
+                    .and()
+                .csrf().disable();
     }
 }
