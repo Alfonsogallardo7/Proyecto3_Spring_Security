@@ -46,13 +46,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/propietario/{id}").hasAnyRole("ADMIN", "PROPIETARIO")
                 .antMatchers(HttpMethod.POST, "/vivienda").hasRole("PROPIETARIO")
                 .antMatchers(HttpMethod.GET, "/vivienda").hasRole("USER")
-                .antMatchers(HttpMethod.GET, "vivienda/{id}").hasRole("USER")
-                .antMatchers(HttpMethod.PUT, "vivienda/{id}").hasAnyRole("PROPIETARIO", "ADMIN")
-                .antMatchers(HttpMethod.DELETE, "vivienda/{id}").hasAnyRole("PROPIETARIO", "ADMIN")
+                .antMatchers(HttpMethod.GET, "/vivienda/{id}").hasRole("USER")
+                .antMatchers(HttpMethod.PUT, "/vivienda/{id}").hasAnyRole("PROPIETARIO", "ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/vivienda/{id}").hasAnyRole("PROPIETARIO", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/vivienda/{id}/inmobiliaria/{id}").hasAnyRole("PROPIETARIO", "ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/vivienda/{id}/inmobiliaria").hasAnyRole("ADMIN", "PROPIETARIO", "GESTOR")
-                .anyRequest().authenticated()
-                    .and()
-                .csrf().disable();
+                .antMatchers(HttpMethod.POST, "/inmobiliaria/{id}/gestor").hasAnyAuthority("ADMIN", "GESTOR")
+                .antMatchers(HttpMethod.DELETE, "/inmobiliaria/gestor/{id}").hasAnyRole("ADMIN", "GESTOR")
+                .antMatchers(HttpMethod.GET, "/inmobiliaria/gestor").hasAnyRole("ADMIN", "GESTOR")
+                .antMatchers(HttpMethod.GET, "/inmobiliaria").hasRole("USER")
+                .antMatchers(HttpMethod.GET, "/inmobiliaria/{id}").hasRole("USER")
+                .antMatchers(HttpMethod.DELETE, "/inmobiliaria/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/vivienda/{id}/meinteresa").hasRole("PROPIETARIO")
+                .antMatchers(HttpMethod.DELETE, "/vivienda/{id}/meinteresa").hasAnyRole("ADMIN", "PROPIETARIO")
+                .antMatchers(HttpMethod.GET, "/interesado").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/interesado/{id}").hasAnyRole("ADMIN", "PROPIETARIO")
+                .antMatchers(HttpMethod.GET, "/vivienda/top?n=10").hasRole("USER")
+                    .and();
     }
 }
