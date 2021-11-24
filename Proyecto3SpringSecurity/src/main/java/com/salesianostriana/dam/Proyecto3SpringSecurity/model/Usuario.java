@@ -43,6 +43,10 @@ public class Usuario {
     @JoinColumn(name = "inmobiliaria_id")
     private List<Inmobiliaria> inmobiliarias = new ArrayList<>();
 
+    @Builder.Default
+    @OneToMany(mappedBy = "vivienda_id")
+    private List<Vivienda> viviendas = new ArrayList<>();
+
     public Usuario(String nombre, String apellidos, String direccion, String email, String telefono, String avatar, String password, UserRole role) {
         this.nombre = nombre;
         this.apellidos = apellidos;

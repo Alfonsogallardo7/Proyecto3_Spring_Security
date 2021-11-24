@@ -20,6 +20,18 @@ public class UsuarioDtoConverter {
     }
 
     public GetUsuarioDto usuarioToGetUsuarioDto (Usuario usuario) {
-        return GetUsuarioDto
+        return GetUsuarioDto.builder()
+                .nombre(usuario.getNombre())
+                .apellidos(usuario.getApellidos())
+                .direccion(usuario.getDireccion())
+                .email(usuario.getEmail())
+                .telefono(usuario.getTelefono())
+                .avatar(usuario.getAvatar())
+                .password(usuario.getPassword())
+                .role(usuario.getRole())
+                .inmobiliaria(usuario.getInmobiliarias())
+                .viviendas(usuario.getViviendas())
+                .build();
+
     }
 }

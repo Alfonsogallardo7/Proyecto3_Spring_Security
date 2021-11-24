@@ -26,6 +26,7 @@ public class Inmobiliaria {
     @OneToMany(mappedBy = "inmobiliaria")
     private List <Vivienda> viviendas = new ArrayList();
 
+    @Builder.Default
     @OneToMany(mappedBy = "usuario")
     private List <Usuario> usuarios = new ArrayList();
     public Inmobiliaria(String nombre, String email, String telefono) {

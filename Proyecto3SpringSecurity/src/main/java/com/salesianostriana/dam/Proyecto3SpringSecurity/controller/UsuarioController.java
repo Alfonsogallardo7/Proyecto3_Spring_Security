@@ -44,6 +44,9 @@ public class UsuarioController {
                     data.map(usuarioDtoConverter::usuarioToGetUsuarioDto);
 
             UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(request.getRequestURL().toString());
+
+            return ResponseEntity.ok().header("Link",
+                    paginationLinksUtils.createLinkHeader(result, uriBuilder)).body(result);
         }
     }
 }
