@@ -19,7 +19,7 @@ public class UserControllers {
     private final UserEntityService userEntityService;
     private final UserDtoConverter userDtoConverter;
 
-    @PostMapping("/auth/register")
+    @PostMapping("/auth/register/user")
     public ResponseEntity<GetUserDto> nuevoUsuario(@RequestBody CreateUserDto newUser) {
         UserEntity saved = userEntityService.save(newUser);
 

@@ -1,7 +1,9 @@
 package com.salesianostriana.dam.Proyecto3SpringSecurity.controller;
 
+import com.salesianostriana.dam.Proyecto3SpringSecurity.dto.InmobiliariaDto.GetInmobiliariaDto;
+import com.salesianostriana.dam.Proyecto3SpringSecurity.dto.InmobiliariaDto.InmobiliariaDtoConverter;
 import com.salesianostriana.dam.Proyecto3SpringSecurity.model.Inmobiliaria;
-import com.salesianostriana.dam.Proyecto3SpringSecurity.services.base.InmobiliariaServicio;
+import com.salesianostriana.dam.Proyecto3SpringSecurity.services.InmobiliariaServicio;
 import com.salesianostriana.dam.Proyecto3SpringSecurity.users.model.UserEntity;
 import com.salesianostriana.dam.Proyecto3SpringSecurity.users.model.UserRole;
 import com.salesianostriana.dam.Proyecto3SpringSecurity.util.PaginationLinksUtils;
@@ -26,20 +28,39 @@ public class InmobiliariaController {
     private final PaginationLinksUtils paginationLinksUtils;
     private final InmobiliariaDtoConverter inmobiliariaDtoConverter;
 
-    /*
-    Preguntar a luismi si hay que lanza una excepcion, como en el proyecto de ow
-     */
     @GetMapping("/gestor/")
-    public ResponseEntity<?> findAllByGestor(Pageable pageable, HttpServletRequest request, @AuthenticationPrincipal UserEntity user) {
+    public ResponseEntity<?> findAllByGestorOrAdmin(Pageable pageable, HttpServletRequest request, @AuthenticationPrincipal UserEntity user) {
         Page<Inmobiliaria> data = inmobiliariaServicio.findAll(pageable);
-        if (user.getRole().contains(UserRole.GESTOR)) {
+        if ((user.getRole()==UserRole.GESTOR)||(user.getRole()==UserRole.ADMIN)) {
             data = inmobiliariaServicio.findAll(pageable);
-        }else {
-            data = inmobiliariaServicio.findAllByUser(user, pageable);
+        }
+        else {
+            data = inmobiliariaServicio.findAllByGestor(user, pageable);
         }
         if (data.isEmpty()) {
             return ResponseEntity.notFound().build();
         } else {
+            Page<GetInmobiliariaDto> result=
+                    data.map(inmobiliariaDtoConverter::inmobiliariaToGetInmobiliariaDto);
+
+            UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(request.getRequestURL().toString());
+
+            return ResponseEntity.ok().header("Link",
+                    paginationLinksUtils.createLinkHeader(result, uriBuilder)).body(result);
+        }
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<?> findAllByUserAutenticated (Pageable pageable, HttpServletRequest request, @AuthenticationPrincipal UserEntity user) {
+        Page<Inmobiliaria> data = inmobiliariaServicio.findAll(pageable);
+        if (user.getRole()==UserRole.USER) {
+            data = inmobiliariaServicio.findAll(pageable);
+        } else {
+            data = inmobiliariaServicio.findAllByAutenticado(user, pageable);
+        }
+        if (data.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }else {
             Page<GetInmobiliariaDto> result=
                     data.map(inmobiliariaDtoConverter::inmobiliariaToGetInmobiliariaDto);
 

@@ -39,5 +39,18 @@ public class Usuario {
     @OneToMany(mappedBy = "interesado")
     private List<Interesa> interesa = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "inmobiliaria_id")
+    private List<Inmobiliaria> inmobiliarias = new ArrayList<>();
 
+    public Usuario(String nombre, String apellidos, String direccion, String email, String telefono, String avatar, String password, UserRole role) {
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.direccion = direccion;
+        this.email = email;
+        this.telefono = telefono;
+        this.avatar = avatar;
+        this.password = password;
+        this.role = role;
+    }
 }

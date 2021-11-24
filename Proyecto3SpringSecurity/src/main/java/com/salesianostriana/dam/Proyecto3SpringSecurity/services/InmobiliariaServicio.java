@@ -1,12 +1,12 @@
-package com.salesianostriana.dam.Proyecto3SpringSecurity.services.base;
+package com.salesianostriana.dam.Proyecto3SpringSecurity.services;
 
 import com.salesianostriana.dam.Proyecto3SpringSecurity.model.Inmobiliaria;
 import com.salesianostriana.dam.Proyecto3SpringSecurity.repository.InmobiliariaRepository;
+import com.salesianostriana.dam.Proyecto3SpringSecurity.services.base.BaseService;
 import com.salesianostriana.dam.Proyecto3SpringSecurity.users.model.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -37,7 +37,11 @@ public class InmobiliariaServicio extends BaseService<Inmobiliaria, Long, Inmobi
     })).build())
     }**/
 
-    public Page<Inmobiliaria> findAllByUser (UserEntity user, Pageable pageable) {
+    public Page<Inmobiliaria> findAllByGestor (UserEntity user, Pageable pageable) {
         return repositorio.findByCliente(user, pageable);
+    }
+
+    public Page<Inmobiliaria> findAllByAutenticado (UserEntity user, Pageable pageable) {
+        return repositorio.findByAutenticado(user, pageable);
     }
 }
