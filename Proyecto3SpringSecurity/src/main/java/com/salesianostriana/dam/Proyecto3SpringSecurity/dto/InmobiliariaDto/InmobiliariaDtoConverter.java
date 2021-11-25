@@ -32,7 +32,6 @@ public class InmobiliariaDtoConverter {
                         .collect(Collectors.toSet())
                 )*/
                 .viviendas(inmobiliaria.getViviendas())
-                .usuarios(inmobiliaria.getUsuarios())
                 .build();
     }
 }

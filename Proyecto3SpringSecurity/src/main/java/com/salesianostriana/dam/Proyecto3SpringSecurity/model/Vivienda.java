@@ -102,5 +102,25 @@ public class Vivienda {
         inmobiliaria = null;
     }
 
+    public void addUsuario(Usuario usuario) {
+        if (usuario instanceof Usuario) {
+            this.usuario = (Usuario) usuario;
+            if (((Usuario) usuario).getViviendas() == null) {
+                ((Usuario) usuario).setViviendas(new ArrayList());
+                ((Usuario) usuario).getViviendas().add(this);
+            } else {
+                ((Usuario) usuario).getViviendas().add(this);
+            }
+        }
+    }
+
+    public void removeUsuario() {
+        if (this.usuario != null)
+            this.usuario.getViviendas().remove(this);
+        this.usuario = null;
+    }
+
+
+
 
 }

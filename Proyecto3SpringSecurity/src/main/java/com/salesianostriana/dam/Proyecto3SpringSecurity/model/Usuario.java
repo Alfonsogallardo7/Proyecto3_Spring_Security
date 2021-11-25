@@ -39,8 +39,8 @@ public class Usuario {
     @OneToMany(mappedBy = "interesado")
     private List<Interesa> interesa = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "inmobiliaria_id")
+    @Builder.Default
+    @OneToMany (mappedBy = "inmobiliaria_id")
     private List<Inmobiliaria> inmobiliarias = new ArrayList<>();
 
     @Builder.Default

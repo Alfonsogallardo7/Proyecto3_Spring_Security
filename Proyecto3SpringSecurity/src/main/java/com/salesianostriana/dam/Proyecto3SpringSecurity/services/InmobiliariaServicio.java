@@ -44,4 +44,6 @@ public class InmobiliariaServicio extends BaseService<Inmobiliaria, Long, Inmobi
     public Page<Inmobiliaria> findAllByAutenticado (UserEntity user, Pageable pageable) {
         return repositorio.findByAutenticado(user, pageable);
     }
+
+
 }

@@ -13,11 +13,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/inmobiliaria")
@@ -28,7 +30,7 @@ public class InmobiliariaController {
     private final PaginationLinksUtils paginationLinksUtils;
     private final InmobiliariaDtoConverter inmobiliariaDtoConverter;
 
-    @GetMapping("/gestor/")
+    @GetMapping("/{id}/gestor/")
     public ResponseEntity<?> findAllByGestorOrAdmin(Pageable pageable, HttpServletRequest request, @AuthenticationPrincipal UserEntity user) {
         Page<Inmobiliaria> data = inmobiliariaServicio.findAll(pageable);
         if ((user.getRole()==UserRole.GESTOR)||(user.getRole()==UserRole.ADMIN)) {
@@ -53,15 +55,15 @@ public class InmobiliariaController {
     @GetMapping("/")
     public ResponseEntity<?> findAllByUserAutenticated (Pageable pageable, HttpServletRequest request, @AuthenticationPrincipal UserEntity user) {
         Page<Inmobiliaria> data = inmobiliariaServicio.findAll(pageable);
-        if (user.getRole()==UserRole.USER) {
+        if (user.getRole() == UserRole.USER) {
             data = inmobiliariaServicio.findAll(pageable);
         } else {
             data = inmobiliariaServicio.findAllByAutenticado(user, pageable);
         }
         if (data.isEmpty()) {
             return ResponseEntity.notFound().build();
-        }else {
-            Page<GetInmobiliariaDto> result=
+        } else {
+            Page<GetInmobiliariaDto> result =
                     data.map(inmobiliariaDtoConverter::inmobiliariaToGetInmobiliariaDto);
 
             UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(request.getRequestURL().toString());
@@ -70,4 +72,19 @@ public class InmobiliariaController {
                     paginationLinksUtils.createLinkHeader(result, uriBuilder)).body(result);
         }
     }
+
+    /*@GetMapping("/{id}")
+    public ResponseEntity<?> findByIdByUserAutenticado (@PathVariable Long id, @AuthenticationPrincipal UserEntity user) {
+        Optional<Inmobiliaria> inmobiliariaBuscada = inmobiliariaServicio.findById(id);
+        if (user.getRole() == UserRole.USER){
+            if (inmobiliariaBuscada.isEmpty())
+                return ResponseEntity.notFound().build();
+            else
+                return ResponseEntity.ok().body(inmobiliariaDtoConverter.inmobiliariaToGetInmobiliariaDto(inmobiliariaBuscada.get()));
+        } else {
+
+        }
+
+
+    }**/
 }
